@@ -659,25 +659,13 @@ else()
 
   if(USE_SYSTEM_LIBINDI)
     message(STATUS "Using system's libindi")
-    # INDI
-    # some features for indi >= 0.9 are used apparently
-    find_package(INDI 0.9 REQUIRED)
+    find_package(INDI 1.7 REQUIRED)
     # source files include <libindi/baseclient.h> so we need the libindi parent directory in the include directories
     get_filename_component(INDI_INCLUDE_PARENT_DIR ${INDI_INCLUDE_DIR} DIRECTORY)
     include_directories(${INDI_INCLUDE_PARENT_DIR})
-    if(INDI_VERSION VERSION_LESS "1.4")
-      set(PHD_LINK_EXTERNAL ${PHD_LINK_EXTERNAL} ${INDI_CLIENT_LIBRARIES} ${INDI_LIBRARIES})
-    else(INDI_VERSION VERSION_LESS "1.4")
-      set(PHD_LINK_EXTERNAL ${PHD_LINK_EXTERNAL} ${INDI_CLIENT_LIBRARIES})
-    endif(INDI_VERSION VERSION_LESS "1.4")
-    if(INDI_VERSION VERSION_LESS "1.1")
-      add_definitions("-DINDI_PRE_1_1_0")
+    if(INDI_VERSION VERSION_LESS "2.0.0")
+      add_definitions("-DINDI_PRE_2_0_0")
     endif()
-    if(INDI_VERSION VERSION_LESS "1.0")
-      add_definitions("-DINDI_PRE_1_0_0")
-    endif()
-
-    # INDI depends on libz
     find_package(ZLIB REQUIRED)
     set(PHD_LINK_EXTERNAL ${PHD_LINK_EXTERNAL} ${ZLIB_LIBRARIES})
   else()
